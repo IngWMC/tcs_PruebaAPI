@@ -1,0 +1,72 @@
+service: pruebaapi-service
+
+frameworkVersion: "1.54.0"
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  region: eu-central-1
+  profile: prueba
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - ec2:CreateNetworkInterface
+        - ec2:DescribeNetworkInterfaces
+        - ec2:DeleteNetworkInterface
+      Resource:
+        - "*"
+
+functions:
+  createCliente:
+    handler: src/routes/clienteBD.createCliente
+    events:
+      - http:
+          path: /cliente
+          method: post
+          cors: true
+    vpc:
+      securityGroupIds:
+        - sg-849191fa
+      subnetIds:
+        - subnet-1dce6551
+        - subnet-11c7a97b
+        - subnet-b7ee4acb
+
+  getAllClientes:
+    handler: src/routes/clienteBD.getAllClientes
+    events:
+      - http:
+          path: /clientes
+          method: get
+          cors: true
+    vpc:
+      securityGroupIds:
+        - sg-849191fa
+      subnetIds:
+        - subnet-1dce6551
+        - subnet-11c7a97b
+        - subnet-b7ee4acb
+
+  getCliente:
+    handler: src/routes/clienteBD.getCliente
+    events:
+      - http:
+          path: /cliente/{id}
+          method: get
+          cors: true
+    vpc:
+      securityGroupIds:
+        - sg-849191fa
+      subnetIds:
+        - subnet-1dce6551
+        - subnet-11c7a97b
+        - subnet-b7ee4acb
+
+  getPersona:
+    handler: src/routes/swapi.getPersona
+    events:
+      - http:
+          path: /persona/{id}
+          method: get
+          cors: true
